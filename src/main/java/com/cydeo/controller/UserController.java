@@ -1,6 +1,8 @@
-/*package com.cydeo.controller;
+package com.cydeo.controller;
 
 import com.cydeo.dto.UserDTO;
+import com.cydeo.service.RoleService;
+import com.cydeo.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,13 +26,13 @@ public class UserController {
     public String createUser(Model model){
 
         model.addAttribute("user", new UserDTO());
-        model.addAttribute("roles", roleService.findAll());
-        model.addAttribute("users", userService.findAll());
+        model.addAttribute("roles", roleService.listAllRoles());
+        model.addAttribute("users", userService.listAllUsers());
 
         return "/user/create";
 
     }
-
+/*
     @PostMapping("/create")
     public String insertUser(@Valid @ModelAttribute("user") UserDTO user, BindingResult bindingResult, Model model) {
 
@@ -84,5 +86,6 @@ public class UserController {
         return "redirect:/user/create";
     }
 
+ */
+
 }
-*/

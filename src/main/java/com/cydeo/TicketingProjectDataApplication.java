@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-@SpringBootApplication
+@SpringBootApplication//@Configuration
 public class TicketingProjectDataApplication {
 
     public static void main(String[] args) {
@@ -14,7 +14,7 @@ public class TicketingProjectDataApplication {
 
     ModelMapper mapper = new ModelMapper();
 
-    @Bean
+    @Bean//we create @Bean for 3rd party library class--can't be used stereotype because is not our class
     public ModelMapper mapper(){
         return new ModelMapper();
     }

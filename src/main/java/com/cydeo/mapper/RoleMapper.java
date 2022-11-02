@@ -7,9 +7,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RoleMapper {
+public class RoleMapper {//mapper coming from third party
 
-    private ModelMapper modelMapper;
+    private ModelMapper modelMapper;                //solid principle do not crete all in one class-- create methode whatever we need use
 
     public RoleMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;

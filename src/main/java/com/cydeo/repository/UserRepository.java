@@ -8,6 +8,6 @@ import javax.transaction.Transactional;
 public interface UserRepository extends JpaRepository<User, Long> {
     
     User findByUserName(String username);
-    @Transactional
-    void deleteByUserName(String username);
+    @Transactional//if transaction is successful will get commit if not rollback
+    void deleteByUserName(String username);//derived query
 }

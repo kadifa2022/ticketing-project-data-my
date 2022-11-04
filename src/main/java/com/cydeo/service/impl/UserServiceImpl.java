@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(UserDTO user) {
-     userRepository.save(userMapper.convertToEntity(user));//
+     userRepository.save(userMapper.convertToEntity(user));//we don't use stream because is only one object
     }
 
     @Override
@@ -63,6 +63,18 @@ public class UserServiceImpl implements UserService {
 //      userRepository.save(userMapper.convertToEntity(user));
 //      return findByUserName(user.getFirstName());
 
+
+    }
+
+    @Override
+    public void delete(String username) {
+        User user = userRepository.findByUserName(username);
+        user.setIsDeleted(true);
+        userRepository.save(user);//update and never delete
+
+        //logic go to Db and het that user with username
+        //change the isDeleted field dto true
+        //save the object in db
 
     }
 }

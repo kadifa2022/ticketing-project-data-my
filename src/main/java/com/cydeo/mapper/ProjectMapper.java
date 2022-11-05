@@ -5,10 +5,12 @@ import com.cydeo.dto.ProjectDTO;
 import com.cydeo.entity.Project;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProjectMapper {
 
-    private ModelMapper modelMapper;                //solid principle do not crete all in one class-- create methode whatever we need use
+    private final ModelMapper modelMapper;                //solid principle do not crete all in one class-- create methode whatever we need use
 
     public ProjectMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;

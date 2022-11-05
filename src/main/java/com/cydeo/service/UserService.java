@@ -12,5 +12,11 @@ public interface UserService {
     void save(UserDTO user);
     void deleteByUserName(String username);
     UserDTO update(UserDTO user);
-    void delete(String username);//not delete in db
+    void delete(String username);//from entity--to userService not delete in db go to impl.
+    List<UserDTO> listAllByRole(String role);
+
+
+
+
+
 }

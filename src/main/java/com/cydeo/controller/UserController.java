@@ -85,7 +85,7 @@ public class UserController {
         userService.deleteByUserName(username);
          userService.delete(username);
 
-        return "redirect:/user/create";
+         return "redirect:/user/create";
     }
 
 

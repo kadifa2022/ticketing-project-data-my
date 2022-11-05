@@ -70,11 +70,19 @@ public class UserServiceImpl implements UserService {
     public void delete(String username) {
         User user = userRepository.findByUserName(username);
         user.setIsDeleted(true);
-        userRepository.save(user);//update and never delete
+        userRepository.save(user);//from user service update and never delete
 
         //logic go to Db and het that user with username
         //change the isDeleted field dto true
         //save the object in db
 
+    }
+
+    @Override
+    public List<UserDTO> listAllByRole(String role) {
+
+        List<User> users = userRepository.findByRoleDescriptionIgnoreCase(role);
+
+        return users.stream().map(userMapper::convertToDto).collect(Collectors.toList());
     }
 }

@@ -15,7 +15,7 @@ public class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Boolean isDeleted=false;
+    private Boolean isDeleted=false;//we are adding to table, because we want to see in DB not   UI
     @Column(nullable = false,updatable = false)
     private LocalDateTime insertDateTime;
     @Column(nullable = false,updatable = false)

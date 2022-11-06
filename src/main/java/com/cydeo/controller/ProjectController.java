@@ -79,7 +79,7 @@ public class ProjectController {
     }
 
     @PostMapping("/update")
-    public String updateProject(@Valid @ModelAttribute("project") ProjectDTO project, BindingResult bindingResult, Model model) {
+    public String updateProject(@ModelAttribute("project") ProjectDTO project, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
 
@@ -95,18 +95,19 @@ public class ProjectController {
         return "redirect:/project/create";
 
    }
-//
-//    @GetMapping("/manager/project-status")
-//    public String getProjectByManager(Model model) {
-//
-//        UserDTO manager = userService.findById("john@cydeo.com");
-//        List<ProjectDTO> projects = projectService.getCountedListOfProjectDTO(manager);
-//
-//        model.addAttribute("projects", projects);
-//
-//        return "/manager/project-status";
-//
-//    }
+
+
+    @GetMapping("/manager/project-status")
+    public String getProjectByManager(Model model) {
+
+
+        List<ProjectDTO> projects = projectService.listAllProjectDetails();//cap by sec
+
+        model.addAttribute("projects", projects);
+
+        return "/manager/project-status";
+
+    }
 //
 //    @GetMapping("/manager/complete/{projectCode}")
 //    public String managerCompleteProject(@PathVariable("projectCode") String projectCode) {

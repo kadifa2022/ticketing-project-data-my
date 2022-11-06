@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     
-    User findByUserName(String username);
+    User findByUserName(String username);//for update we use by username
     @Transactional//if transaction is successful will get commit if not rollback
     void deleteByUserName(String username);//derived query
 

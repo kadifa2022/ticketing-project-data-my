@@ -1,9 +1,12 @@
 package com.cydeo.service.impl;
 
+import com.cydeo.dto.ProjectDTO;
 import com.cydeo.dto.TaskDTO;
+import com.cydeo.entity.Project;
 import com.cydeo.entity.Task;
 import com.cydeo.entity.User;
 import com.cydeo.enums.Status;
+import com.cydeo.mapper.ProjectMapper;
 import com.cydeo.mapper.TaskMapper;
 import com.cydeo.repository.TaskRepository;
 import com.cydeo.service.TaskService;
@@ -16,16 +19,17 @@ import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService {
- private final TaskMapper taskMapper;
+     private final TaskMapper taskMapper;
    private final TaskRepository taskRepository;
+   private  final ProjectMapper projectMapper;
 
-    public TaskServiceImpl(TaskMapper taskMapper, TaskRepository taskRepository) {
-     this.taskMapper = taskMapper;
-     this.taskRepository = taskRepository;
-    }
+ public TaskServiceImpl(TaskMapper taskMapper, TaskRepository taskRepository, ProjectMapper projectMapper) {
+  this.taskMapper = taskMapper;
+  this.taskRepository = taskRepository;
+  this.projectMapper = projectMapper;
+ }
 
-
-    @Override
+ @Override
     public List<TaskDTO> listAllTasks() {
         return taskRepository.findAll().stream().map(taskMapper::convertToDto).collect(Collectors.toList());
     }
@@ -82,4 +86,11 @@ public class TaskServiceImpl implements TaskService {
     public int totalCompletedTask(String projectCode) {
      return taskRepository.totalCompletedTasks(projectCode);
     }
-   }
+
+ @Override
+ public void deleteByProject(ProjectDTO projectDTO) {
+  Project project = projectMapper.convertToEntity(projectDTO);
+  List<Task> tasks = taskRepository.findAllByProject(project);
+  tasks.forEach(task -> delete(task.getId()));
+ }
+}

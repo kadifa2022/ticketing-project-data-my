@@ -70,10 +70,10 @@ public class ProjectServiceImpl implements ProjectService {
     public void delete(String code) {
       Project project = projectRepository.findByProjectCode(code);
         project.setIsDeleted(true);
-        project.setProjectCode(project.getProjectCode() + "-" + project.getId());//SP00-1
+        project.setProjectCode(project.getProjectCode() + "-" + project.getId());//SP00-1 how to set functional(to be able to use same productCode after deleting) but depending on company need.
       projectRepository.save(project);
 
-      taskService.deleteByProject(projectMapper.convertToDto(project));
+      taskService.deleteByProject(projectMapper.convertToDto(project));//setting projectMapper tha
 
     }
 
@@ -82,6 +82,7 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectRepository.findByProjectCode(projectCode);
         project.setProjectStatus(Status.COMPLETE);
         projectRepository.save(project);
+        taskService.completeByProject(projectMapper.convertToDto(project));
 
     }
 
@@ -104,5 +105,12 @@ public class ProjectServiceImpl implements ProjectService {
                 ).collect(Collectors.toList());
 
         //hey db, give me all projects assigned to manager login in the system
+    }
+
+    @Override
+    public List<ProjectDTO> listAllNonCompletedByAssignedManager(UserDTO assignedManager) {
+        List<Project> projects = projectRepository.
+                findAllByProjectStatusIsNotAndAssignedManager(Status.COMPLETE, userMapper.convertToEntity(assignedManager));
+        return projects.stream().map(projectMapper::convertToDto).collect(Collectors.toList());
     }
 }

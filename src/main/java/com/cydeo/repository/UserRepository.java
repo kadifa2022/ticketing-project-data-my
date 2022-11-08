@@ -8,10 +8,11 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+    List<User> findAllByIsDeletedOrderByFirstNameDesc(Boolean deleted);
     
-    User findByUserName(String username);//for update we use by username
+    User findByUserNameAndIsDeleted(String username, Boolean deleted);//for update we use by username
     @Transactional//if transaction is successful will get commit if not rollback
     void deleteByUserName(String username);//all queries inside repository Where included @Where(clause="is_deleted=false")all combined
 
-    List<User> findByRoleDescriptionIgnoreCase(String description);
+    List<User> findByRoleDescriptionIgnoreCaseAndIsDeleted(String description, Boolean deleted);
 }

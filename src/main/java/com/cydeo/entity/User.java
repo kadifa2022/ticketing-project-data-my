@@ -14,16 +14,20 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "users")//hibranate
+@Table(name = "users")//hibernate
 //@Where(clause = "is_deleted=false")//any repo.which is using the user entity all the queies will be combined
 public class User extends BaseEntity {
 
-    private String firstName;//colums
+    private String firstName;
     private String lastName;
+
+    @Column(unique = true)//unique
     private String userName;
+
     private String passWord;
     private boolean enabled;
     private String phone;
+
     @ManyToOne        //relationship c
     private Role role;
     @Enumerated(EnumType.STRING)//should be saved as string female male

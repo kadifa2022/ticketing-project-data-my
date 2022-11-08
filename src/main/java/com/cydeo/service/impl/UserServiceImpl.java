@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> listAllUsers() {
-       List<User> userList= userRepository.findAll(Sort.by("firstName"));
+       List<User> userList= userRepository.findAllByIsDeletedOrderByFirstNameDesc(false);
        return userList.stream().map(userMapper::convertToDto).collect(Collectors.toList());
 
 
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findByUserName(String username) {
         // userMapper.convertToDto(userRepository.findByUserName(username));
-        User user= userRepository.findByUserName(username);
+        User user= userRepository.findByUserNameAndIsDeleted(username, false);
         return userMapper.convertToDto(user);
     }
 
@@ -53,16 +53,16 @@ public class UserServiceImpl implements UserService {
      userRepository.save(userMapper.convertToEntity(user));//we don't use stream because is only one object
     }
 
-    @Override
-    public void deleteByUserName(String username) {
-    userRepository.deleteByUserName(username);
+//    @Override
+//    public void deleteByUserName(String username) {
+//    userRepository.deleteByUserName(username);
 
-    }
+//    }
 
     @Override
     public UserDTO update(UserDTO user) {
         //find current user
-        User user1=userRepository.findByUserName(user.getUserName());
+        User user1=userRepository.findByUserNameAndIsDeleted(user.getUserName(), false);
         //map update user dto to entity object
         User convertedUser=userMapper.convertToEntity(user);
        //set id to the converted object
@@ -79,9 +79,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(String username) {
-        User user = userRepository.findByUserName(username);
+        User user = userRepository.findByUserNameAndIsDeleted(username,false);
+
         if(checkIfUserCanBeDeleted(user)) { //condition
             user.setIsDeleted(true);
+            user.setUserName(user.getUserName() + "-" + user.getId());//harold@manager.com-2
             userRepository.save(user);//from user service update and never delete
 
             //logic go to Db and het that user with username
@@ -93,7 +95,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDTO> listAllByRole(String role) {
 
-        List<User> users = userRepository.findByRoleDescriptionIgnoreCase(role);
+        List<User> users = userRepository.findByRoleDescriptionIgnoreCaseAndIsDeleted(role, false);
 
         return users.stream().map(userMapper::convertToDto).collect(Collectors.toList());
     }

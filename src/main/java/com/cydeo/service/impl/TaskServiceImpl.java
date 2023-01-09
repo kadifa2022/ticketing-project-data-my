@@ -46,7 +46,7 @@ public class TaskServiceImpl implements TaskService {
      dto.setTaskStatus(Status.OPEN);
      dto.setAssignedDate(LocalDate.now());
      Task task = taskMapper.convertToEntity(dto);
-     taskRepository.save((task));
+     taskRepository.save(task);
 
     }
 

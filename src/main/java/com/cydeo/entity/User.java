@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "users")//hibernate
-//@Where(clause = "is_deleted=false")//any repo.which is using the user entity all the queies will be combined
+//@Where(clause = "is_deleted=false")     //any repo.which is using the user entity all the queries will be combined
 public class User extends BaseEntity {
 
     private String firstName;

@@ -1,23 +1,22 @@
 package com.cydeo.config;
 
+import com.cydeo.service.SecurityService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 public class SecurityConfig {
+
+    private final SecurityService securityService;
+
+    public SecurityConfig(SecurityService securityService) {// SecurityService has userDetailsService
+        this.securityService = securityService;
+    }
+
+
 //    @Bean //HARD CODED
 //    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
 //
@@ -37,9 +36,9 @@ public class SecurityConfig {
                .authorizeRequests()
 //                .antMatchers("/user/**").hasRole("ADMIN")// need to be accessible by role under user controller
                   .antMatchers("task/**").hasAuthority("Admin")//hasAuthority (Admin-> Must match with DB Admin (spring is not putting prefix // m
-//                .antMatchers("/project/**").hasRole("MANAGER")// hasRole we need to put in DB Role_Admin
-//                .antMatchers("/task/employee/**").hasRole("EMPLOYEE")
-//                .antMatchers("/task/**").hasRole("MANAGER")
+                .antMatchers("/project/**").hasAuthority("Manager")// hasRole we need to put underscore in DB Role_Admin
+                .antMatchers("/task/employee/**").hasAuthority("Employee")
+                .antMatchers("/task/**").hasAuthority("Manager")
                // .antMatchers("/task/**").hasAnyRole("EMPLOYEE, ADMIN")//hasAnyRole->more than one role
                // .antMatchers("task/**").hasAuthority("ROLE_EMPLOYEE")// if we are using hasAuthority we need to use underscore
                 .antMatchers(
@@ -53,12 +52,21 @@ public class SecurityConfig {
                 .and()
             //    .httpBasic()// pop up box from spring // wee will change with our logIn page
                 .formLogin()// my form
-                .loginPage("/login")
-                .defaultSuccessUrl("/welcome")
+                .loginPage("/login")//navigate controller
+                .defaultSuccessUrl("/welcome")//successfully logIn
                 .failureUrl("/login?error=true")//if authentication fail will go to this url
                 .permitAll()//access for  everyone
-
-                .and().build();
+                .and()
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))//
+                .logoutSuccessUrl("/login")
+                .and()
+                .rememberMe()//remember-me in html
+                .tokenValiditySeconds(120)
+                .key("cydeo")
+                .userDetailsService(securityService)// remember who? we need DI Security service that has userDetailsService
+                .and()
+                .build();
 
     }
 }

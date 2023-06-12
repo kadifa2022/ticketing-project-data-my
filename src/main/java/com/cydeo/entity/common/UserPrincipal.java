@@ -15,7 +15,7 @@ public class UserPrincipal implements UserDetails {// UserPrincipal is mapper  n
 
     private final User user;// DI my Entity
 
-    public UserPrincipal(User user) {
+    public UserPrincipal(User user) {//constructor
         this.user = user;
     }
 
@@ -24,6 +24,7 @@ public class UserPrincipal implements UserDetails {// UserPrincipal is mapper  n
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // this is what spring understand GrantedAuthority
         List<GrantedAuthority> authorityList = new ArrayList<>();
+        //we are defining role
         GrantedAuthority authority = new SimpleGrantedAuthority(this.user.getRole().getDescription());// getting role descriptions from DB ->ADMIN, MANAGER, EMPLOYEE
         authorityList.add(authority);
         return authorityList;

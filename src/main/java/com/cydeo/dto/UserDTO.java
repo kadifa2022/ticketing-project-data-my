@@ -11,7 +11,7 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
-    private Long id;//this is going to be manager id in tabla
+    private Long id;//this is going to be manager id in table we added this field to use as primary key on the form
 
     public Long getId() {
         return id;

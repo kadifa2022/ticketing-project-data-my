@@ -36,8 +36,8 @@ public class SecurityConfig {
         return http
                .authorizeRequests()
 //                .antMatchers("/user/**").hasRole("ADMIN")// need to be accessible by role under user controller
-                  .antMatchers("task/**").hasAuthority("ROLE_ADMIN")
-//                .antMatchers("/project/**").hasRole("MANAGER")
+                  .antMatchers("task/**").hasAuthority("Admin")//hasAuthority (Admin-> Must match with DB Admin (spring is not putting prefix // m
+//                .antMatchers("/project/**").hasRole("MANAGER")// hasRole we need to put in DB Role_Admin
 //                .antMatchers("/task/employee/**").hasRole("EMPLOYEE")
 //                .antMatchers("/task/**").hasRole("MANAGER")
                // .antMatchers("/task/**").hasAnyRole("EMPLOYEE, ADMIN")//hasAnyRole->more than one role

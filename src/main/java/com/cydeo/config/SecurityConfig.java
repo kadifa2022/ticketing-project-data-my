@@ -18,27 +18,30 @@ import java.util.List;
 
 @Configuration
 public class SecurityConfig {
-    @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-
-        List<UserDetails> userList = new ArrayList<>();
-        //We are creating 2  new user and choose constructor wirth 3 parameters(including raw password) and grant Authority (Simple Grant Authority)
-        userList.add(new User("mike", encoder.encode("password")
-                , Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"))));
-        userList.add(new User("ozzy", encoder.encode("password")
-                , Arrays.asList(new SimpleGrantedAuthority("ROLE_MANAGER"))));
-
-        return new InMemoryUserDetailsManager(userList);// we are saving our users in memory list hard coded
-    }
+//    @Bean //HARD CODED
+//    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
+//
+//        List<UserDetails> userList = new ArrayList<>();
+//        //We are creating 2  new user and choose constructor wirth 3 parameters(including raw password) and grant Authority (Simple Grant Authority)
+//        userList.add(new User("mike", encoder.encode("password")
+//                , Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"))));
+//        userList.add(new User("ozzy", encoder.encode("password")
+//                , Arrays.asList(new SimpleGrantedAuthority("ROLE_MANAGER"))));
+//
+//        return new InMemoryUserDetailsManager(userList);// we are saving our users in memory list hard coded
+//    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {     // define filtering and overriding application
         return http
-                .authorizeRequests()
-                .antMatchers("/user/**").hasRole("ADMIN")// need to be accessible by role under user controller
-                .antMatchers("/project/**").hasRole("MANAGER")
-                .antMatchers("/task/employee/**").hasRole("EMPLOYEE")
-                .antMatchers("/task/**").hasRole("MANAGER")
+               .authorizeRequests()
+//                .antMatchers("/user/**").hasRole("ADMIN")// need to be accessible by role under user controller
+                  .antMatchers("task/**").hasAuthority("ROLE_ADMIN")
+//                .antMatchers("/project/**").hasRole("MANAGER")
+//                .antMatchers("/task/employee/**").hasRole("EMPLOYEE")
+//                .antMatchers("/task/**").hasRole("MANAGER")
+               // .antMatchers("/task/**").hasAnyRole("EMPLOYEE, ADMIN")//hasAnyRole->more than one role
+               // .antMatchers("task/**").hasAuthority("ROLE_EMPLOYEE")// if we are using hasAuthority we need to use underscore
                 .antMatchers(
                         "/",
                         "/login",
@@ -48,7 +51,13 @@ public class SecurityConfig {
                 ).permitAll()// everyone can access to those pages
                 .anyRequest().authenticated()// any other request needs to be authenticated
                 .and()
-                .httpBasic()// pop up box from spring // wee will change with our logIn page
+            //    .httpBasic()// pop up box from spring // wee will change with our logIn page
+                .formLogin()// my form
+                .loginPage("/login")
+                .defaultSuccessUrl("/welcome")
+                .failureUrl("/login?error=true")//if authentication fail will go to this url
+                .permitAll()//access for  everyone
+
                 .and().build();
 
     }

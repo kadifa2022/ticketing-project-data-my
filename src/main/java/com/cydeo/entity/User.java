@@ -16,7 +16,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users")//hibernate
 //@Where(clause = "is_deleted=false")     //any repo.which is using the user entity all the queries will be combined
-public class User extends BaseEntity {
+public class User extends BaseEntity {//depends on business logic//we remove @Where clause, because we could not delete Admin(if you log in as admin we can not delete our self
 
     private String firstName;
     private String lastName;

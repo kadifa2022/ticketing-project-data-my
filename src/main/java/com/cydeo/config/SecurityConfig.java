@@ -11,9 +11,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
 
     private final SecurityService securityService;
+    private final AuthSuccessHandler authSuccessHandler;
 
-    public SecurityConfig(SecurityService securityService) {// SecurityService has userDetailsService
+    public SecurityConfig(SecurityService securityService, AuthSuccessHandler authSuccessHandler) {// SecurityService has userDetailsService
         this.securityService = securityService;
+        this.authSuccessHandler = authSuccessHandler;
     }
 
 
@@ -53,7 +55,8 @@ public class SecurityConfig {
             //    .httpBasic()// pop up box from spring // wee will change with our logIn page
                 .formLogin()// my form
                 .loginPage("/login")//navigate controller
-                .defaultSuccessUrl("/welcome")//successfully logIn
+               // .defaultSuccessUrl("/welcome")//successfully logIn by default  welcome/ /which page to land in the system as a user/ admin manager employee
+                .successHandler(authSuccessHandler)//DI and pass authSuccessHandler
                 .failureUrl("/login?error=true")//if authentication fail will go to this url
                 .permitAll()//access for  everyone
                 .and()

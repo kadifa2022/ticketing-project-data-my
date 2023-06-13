@@ -11,7 +11,9 @@ import com.cydeo.repository.ProjectRepository;
 import com.cydeo.service.ProjectService;
 import com.cydeo.service.TaskService;
 import com.cydeo.service.UserService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +28,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final UserMapper userMapper;
     private final TaskService taskService;
-    public ProjectServiceImpl(ProjectRepository projectRepository, ProjectMapper projectMapper, UserService userService, UserMapper userMapper, TaskService taskService) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, ProjectMapper projectMapper, @Lazy UserService userService, UserMapper userMapper, TaskService taskService) {
         this.projectRepository = projectRepository;
         this.projectMapper = projectMapper;
         this.userService = userService;
@@ -88,8 +90,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<ProjectDTO> listAllProjectDetails() {
+        // we are getting authenticated user whoever is log in
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-      UserDTO currentUserDTO=userService.findByUserName("harold@manager.com");// from security
+      UserDTO currentUserDTO=userService.findByUserName(username);// hard coded from security
       User user = userMapper.convertToEntity(currentUserDTO);
       List<Project> list =projectRepository.findAllByAssignedManager(user);
 

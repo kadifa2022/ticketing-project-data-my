@@ -57,6 +57,6 @@ public class UserPrincipal implements UserDetails {// UserPrincipal is mapper  n
 
     @Override
     public boolean isEnabled() {
-        return isEnabled();
+        return this.user.isEnabled();
     }
 }
